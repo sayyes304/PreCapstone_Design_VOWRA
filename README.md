@@ -10,6 +10,8 @@
 - Oculus 개발을 위한 패키지들(Oculus Interaction, Oculus XR Plugin)
 - XR Plugin Management 등 XR 개발 설정들 (https://spectrum-cricket-392.notion.site/Oculus-Development-db6d220af3f74ad9a7aac02bc26879b1)
 - DICOM 파일은 다음 주소에서 받기: https://mri.radiology.uiowa.edu/visible_human_datasets.html 여기서 Regional Tar Files 선택
+- 다음 순서로 씬에 오브젝트 추가하
+- ![image](https://user-images.githubusercontent.com/71119608/196013081-277a26a6-0ef6-40c1-a735-e56726619fc7.png)
 - 씬을 새로 생성해서 아래와 같이 배치하기
 - ![ObjectViewer](https://user-images.githubusercontent.com/71119608/196012724-1c2f194a-0bda-490c-b059-e653d25092bb.png)
 
