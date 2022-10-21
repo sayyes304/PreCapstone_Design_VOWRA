@@ -18,9 +18,14 @@ public enum MyColor { red, orange, yellow, green, blue, black }
 
 public class Sketch : MonoBehaviour
 {
+    public Material[] MatColors;
+
     public GameObject linePrefab;
     LineRenderer lineRenderer;
     bool isDrawing = false;
+
+    // Tube Renderer by good man
+    TubeRenderer tube;
 
     // 위치 파악
     public GameObject rightHandAnchor;
@@ -36,6 +41,7 @@ public class Sketch : MonoBehaviour
 
     // 옵션
     public Color currentColor;
+    public MyColor currentMeshColor;
     public Slider width;
     public TMP_Text widthValue;
 
@@ -43,6 +49,8 @@ public class Sketch : MonoBehaviour
     void Start()
     {
         currentColor = Color.red;
+        currentMeshColor = MyColor.red;
+       
     }
 
     // Update is called once per frame
@@ -73,6 +81,24 @@ public class Sketch : MonoBehaviour
                 // 그리기 종료시에 추가
                 linesData.Add(currentLineData);
                 isDrawing = false;
+
+                // Tube
+                tube = currentLine.GetComponent<TubeRenderer>();
+                tube.SetRadius(width.value / 200);
+                tube.SetPositions(currentLineData.position.ToArray());
+
+                currentLine.GetComponent<MeshRenderer>().material = MatColors[getMeshColorIndex(currentMeshColor)];
+
+                Mesh mesh = new Mesh();
+                lineRenderer.BakeMesh(mesh);
+
+                //currentLine.GetComponent<MeshCollider>().sharedMesh = mesh; // 선 모양대로 collider
+                //currentLine.GetComponent<MeshFilter>().mesh = mesh; // 추후 선 색상을 바꾸거나 특수효과를 주려면 사용 가능
+
+                currentLine.GetComponent<MeshCollider>().sharedMesh = tube.GetMesh();
+                currentLine.GetComponent<MeshFilter>().sharedMesh = tube.GetMesh();
+
+
             }
         }
 
@@ -89,6 +115,10 @@ public class Sketch : MonoBehaviour
         lineRenderer.endColor = currentColor;
         lineRenderer.startWidth = width.value / 200;
         lineRenderer.endWidth = width.value / 200;
+
+
+
+
         lines.Add(line);
         return line;
     }
@@ -123,31 +153,54 @@ public class Sketch : MonoBehaviour
     }
 
 
+    public int getMeshColorIndex(MyColor color)
+    {
+        switch (currentMeshColor)
+        {
+            case MyColor.red: return 0;
+            case MyColor.orange: return 1;
+            case MyColor.yellow: return 2;
+            case MyColor.green: return 3;
+            case MyColor.blue: return 4;
+            default: return 5;
+        }
+
+
+    }
+
     public void PickColor(int color)
     {
+
         switch (color)
         {
             case 0:
                 currentColor = new Color(1, 0, 0); // NOT 255
+                currentMeshColor = MyColor.red;
                 break;
             case 1:
                 currentColor = new Color(1, 0.5f, 0);
+                currentMeshColor= MyColor.orange;
                 break;
             case 2:
                 currentColor = new Color(1, 1, 0);
+                currentMeshColor = MyColor.yellow;
                 break;
             case 3:
                 currentColor = new Color(0, 1, 0);
+                currentMeshColor = MyColor.green;
                 break;
             case 4:
                 currentColor = new Color(0, 0, 1);
+                currentMeshColor = MyColor.blue;
                 break;
             case 5:
             default:
                 currentColor = new Color(0, 0, 0);
+                currentMeshColor = MyColor.black;
                 break;
 
         }
+
     }
 
 
